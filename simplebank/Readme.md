@@ -83,35 +83,36 @@ document.getElementById('connectButton').addEventListener('click', async functio
 ```
 // Add an event listener to the 'depositButton' element for 'click' events
 document.getElementById('depositButton').addEventListener('click', async function() {
-    // Check if a signer has been set (signer should be set after successfully connecting to MetaMask)
+    // Check if a signer has been set, which is necessary for transactions
     if (!signer) {
-        // If no signer is found, alert the user to connect with MetaMask first
+        // Alert the user to connect to MetaMask first if no signer is found
         alert('Please connect to MetaMask first!');
-        // Stop further execution of the function
-        return;
+        return; // Stop further execution if there is no signer
     }
     try {
-        // Create a new contract instance with the provided address, ABI, and signer
-        // This instance allows calling functions of the smart contract
+        // Create a new contract instance using previously defined contractAddress, ABI, and the signer
+        // This enables calling functions on the smart contract
         const contract = new ethers.Contract(contractAddress, abi, signer);
-        
-        // Call the 'deposit' function of the smart contract with a specified value of 1 Wei
-        // The value needs to be sent with the transaction to perform a payable operation
-        const txResponse = await contract.deposit({ value: 1 });
 
-        // Wait for the transaction to be mined to ensure it's been processed by the Ethereum network
+        // Call the 'deposit' function of the smart contract
+        // Include a value of 2 wei and manually set the gas limit for the transaction
+        const txResponse = await contract.deposit({
+            value: ethers.utils.parseUnits("2", "wei"), // Convert 2 wei using ethers utility function
+            gasLimit: 100000 // Manually specify the gas limit for the transaction
+        });
+
+        // Wait for the transaction to be confirmed on the blockchain
         await txResponse.wait();
 
         // Alert the user that the deposit was successful
-        alert('Deposit of 1 Wei successful!');
+        // However, the alert says 1 Wei, but the transaction was for 2 Wei (this might need correction)
+        alert('Deposit of 2 Wei successful!'); // Updated to reflect actual deposit amount
     } catch (error) {
-        // If the transaction fails, log the error to the console for debugging
-        console.error('Transaction failed:', error);
-        // Alert the user about the failure and display the error message
+        // Log any errors to the console for debugging
+        console.error(error);
+        // Alert the user that the transaction failed and display the error message
         alert('Transaction failed: ' + error.message);
     }
 });
-
-
 ```
 # Smart Contract
