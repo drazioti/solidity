@@ -69,8 +69,6 @@ document.getElementById('depositButton').addEventListener('click', async functio
         return;
     }
     try {
-        const response = await fetch('SimpleBank_compData.json');
-        const abi = await response.json();
         const contract = new ethers.Contract(contractAddress, abi, signer);
         const txResponse = await contract.deposit({ value: 1 }); // 1 Wei
         await txResponse.wait();
