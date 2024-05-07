@@ -82,3 +82,4 @@ document.getElementById('depositButton').addEventListener('click', async functio
 });
 
 ```
+# Smart Contract
