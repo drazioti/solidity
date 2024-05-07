@@ -81,21 +81,37 @@ document.getElementById('connectButton').addEventListener('click', async functio
 Ειδοποιεί τον χρήστη για την επιτυχή ή ανεπιτυχή κατάθεση.<br>
 
 ```
+// Add an event listener to the 'depositButton' element for 'click' events
 document.getElementById('depositButton').addEventListener('click', async function() {
+    // Check if a signer has been set (signer should be set after successfully connecting to MetaMask)
     if (!signer) {
+        // If no signer is found, alert the user to connect with MetaMask first
         alert('Please connect to MetaMask first!');
+        // Stop further execution of the function
         return;
     }
     try {
+        // Create a new contract instance with the provided address, ABI, and signer
+        // This instance allows calling functions of the smart contract
         const contract = new ethers.Contract(contractAddress, abi, signer);
-        const txResponse = await contract.deposit({ value: 1 }); // 1 Wei
+        
+        // Call the 'deposit' function of the smart contract with a specified value of 1 Wei
+        // The value needs to be sent with the transaction to perform a payable operation
+        const txResponse = await contract.deposit({ value: 1 });
+
+        // Wait for the transaction to be mined to ensure it's been processed by the Ethereum network
         await txResponse.wait();
+
+        // Alert the user that the deposit was successful
         alert('Deposit of 1 Wei successful!');
     } catch (error) {
+        // If the transaction fails, log the error to the console for debugging
         console.error('Transaction failed:', error);
+        // Alert the user about the failure and display the error message
         alert('Transaction failed: ' + error.message);
     }
 });
+
 
 ```
 # Smart Contract
