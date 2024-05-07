@@ -41,18 +41,36 @@ Aρχικά ορίζουμε την διεύθυνση του συμβολαίο
 ```
 
 ```
+// Add an event listener to the 'connectButton' element for the 'click' event
 document.getElementById('connectButton').addEventListener('click', async function() {
     try {
+        // Attempt to create a Web3 provider using the global 'ethereum' object provided by MetaMask
         const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+        // Request the user's Ethereum accounts. If MetaMask is installed and connected,
+        // this will prompt the user to share their accounts with your application.
         await provider.send("eth_requestAccounts", []);
+
+        // Get a signer object from the provider, which will be used to sign transactions and messages.
+        // The signer is implicitly linked to the first account returned by 'eth_requestAccounts'.
         signer = provider.getSigner();
+
+        // Enable the 'depositButton' by setting its 'disabled' property to false.
+        // This button is presumably disabled by default and should only be enabled after successful connection.
         document.getElementById('depositButton').disabled = false;
+
+        // Show an alert to the user indicating that they have successfully connected their MetaMask account.
         alert('Connected to MetaMask!');
     } catch (error) {
+        // If an error occurs during the connection attempt, log the error to the console.
         console.error(error);
+
+        // Also, display an alert to the user indicating the connection failure and suggesting
+        // that they ensure MetaMask is installed.
         alert('Failed to connect to MetaMask, make sure it is installed.');
     }
 });
+
 
 ```
 
