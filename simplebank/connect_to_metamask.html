@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Bank Interface</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+</head>
+<body>
+    <h1>Simple Bank Contract Interaction</h1>
+    <button id="connectButton">Connect to MetaMask</button>
+    <button id="depositButton" disabled>Deposit 1 Wei</button>
+    <script>
+        let signer;
+        const contractAddress = "0x02E636b284D98E07AcA2FC3bA120b8e9dF268382"; // Replace with your contract's address
+
+        document.getElementById('connectButton').addEventListener('click', async function() {
+            try {
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []); // Request account access
+                signer = provider.getSigner();
+                document.getElementById('depositButton').disabled = false;
+                alert('Connected to MetaMask!');
+            } catch (error) {
+                console.error(error);
+                alert('Failed to connect to MetaMask, make sure it is installed.');
+            }
+        });
+
+        document.getElementById('depositButton').addEventListener('click', async function() {
+            if (!signer) {
+                alert('Please connect to MetaMask first!');
+                return;
+            }
+            try {
+                const response = await fetch('SimpleBank_compData.json');
+                const abi = await response.json();
+                const contract = new ethers.Contract(contractAddress, abi, signer);
+                const txResponse = await contract.deposit({
+                    value: 1 // This is 1 wei
+                });
+                await txResponse.wait();
+                alert('Deposit of 1 Wei successful!');
+            } catch (error) {
+                console.error(error);
+                alert('Transaction failed: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
