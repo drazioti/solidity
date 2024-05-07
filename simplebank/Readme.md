@@ -29,6 +29,17 @@ H JavaScript χειρίζεται τη λογική για τη σύνδεση �
 Χρησιμοποιείται ο Web3Provider της Ethers.js για να δημιουργηθεί ένας provider που συνδέεται με το MetaMask.<br>
 Ζητάει πρόσβαση στους λογαριασμούς χρησιμοποιώντας το eth_requestAccounts.<br>
 Ενεργοποιεί το κουμπί κατάθεσης και ειδοποιεί τον χρήστη για την επιτυχή σύνδεση.<br>
+Aρχικά ορίζουμε την διεύθυνση του συμβολαίου και το ABI.
+```
+        let signer;
+        const contractAddress = "0x...7D6"; // Replace with your contract's address
+        const abi = [
+    {
+   ...
+    }
+                    ]
+```
+
 ```
 document.getElementById('connectButton').addEventListener('click', async function() {
     try {
@@ -46,7 +57,7 @@ document.getElementById('connectButton').addEventListener('click', async functio
 ```
 
 ### Κατάθεση Wei:
-Φορτώνει το ABI του συμβολαίου από ένα τοπικό αρχείο JSON (SimpleBank_compData.json).<br>
+Φορτώνει το ABI του συμβολαίου μέσω της μεταβλητής ```abi```.<br>
 Δημιουργεί μια νέα εμφάνιση του συμβολαίου με χρήση του signer για να υπογράψει τις συναλλαγές.<br>
 Εκτελεί την κατάθεση 1 Wei και επιβεβαιώνει τη συναλλαγή.<br>
 Ειδοποιεί τον χρήστη για την επιτυχή ή ανεπιτυχή κατάθεση.<br>
