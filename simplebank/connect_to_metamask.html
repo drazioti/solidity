@@ -11,7 +11,19 @@
     <button id="depositButton" disabled>Deposit 1 Wei</button>
     <script>
         let signer;
-        const contractAddress = "0x02E636b284D98E07AcA2FC3bA120b8e9dF268382"; // Replace with your contract's address
+        const contractAddress = "0x339...D6"; // Replace with your contract's address
+        const abi = [
+    {
+        "inputs": [],
+        "name": "deposit",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+   ... add the abi of the contract ...
+    }
+]
 
         document.getElementById('connectButton').addEventListener('click', async function() {
             try {
@@ -32,11 +44,13 @@
                 return;
             }
             try {
-                const response = await fetch('SimpleBank_compData.json');
-                const abi = await response.json();
-                const contract = new ethers.Contract(contractAddress, abi, signer);
+              //  const response = await fetch('SimpleBank_compData.json');
+              //  const abi = await response.json();
+
+                const contract = new ethers.Contract(contractAddress, abi, signer); // contractAddress was defined earlier
                 const txResponse = await contract.deposit({
-                    value: 1 // This is 1 wei
+                    value: ethers.utils.parseUnits("2", "wei"), // Specifying 2 wei
+                    gasLimit: 100000 // Manually specifying the gas limit
                 });
                 await txResponse.wait();
                 alert('Deposit of 1 Wei successful!');
